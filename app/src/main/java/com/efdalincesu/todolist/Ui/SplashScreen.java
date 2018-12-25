@@ -1,8 +1,10 @@
-package com.efdalincesu.todolist;
+package com.efdalincesu.todolist.Ui;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.efdalincesu.todolist.R;
 
 public class SplashScreen extends AppCompatActivity {
 

@@ -3,6 +3,7 @@ package com.efdalincesu.todolist.Model;
 import com.efdalincesu.todolist.DBSqlite.DBHelper;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -35,21 +36,17 @@ public class Todo {
     }
 
     public Todo(String title, String summary, String date, boolean status) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
         this.title = title;
         this.summary = summary;
-        this.datenow = dateFormat.format(date);
+        this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
         this.status = status;
     }
 
     public Todo(String title, String summary, String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
         this.title = title;
         this.summary = summary;
-        this.datenow = "23.12.2018";
+        this.datenow =DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
         this.status = false;
     }

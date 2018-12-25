@@ -122,6 +122,13 @@ public class DatabaseUtil {
         return deletedRows;
     }
 
+    public int deleteAllTodo(){
+        database=dbHelper.getWritableDatabase();
+        int deletedRows=database.delete(DBHelper.TABLE_NAME,null,null);
+
+        return deletedRows;
+    }
+
     public int getRowCount(){
 
         database=dbHelper.getReadableDatabase();
