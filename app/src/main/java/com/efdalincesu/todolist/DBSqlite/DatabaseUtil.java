@@ -22,12 +22,12 @@ public class DatabaseUtil {
         dbHelper.close();
     }
 
-    public ArrayList<Todo> selectTodos(){
+    public ArrayList<Todo> selectTodosASC(){
 
         ArrayList<Todo> todos=new ArrayList<>();
         database=dbHelper.getReadableDatabase();
-        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,null,null,null,null,null);
-        cursor.moveToFirst();
+        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,null,null,null,null,
+                "datetime   ("+DBHelper.DATE_COLUMN+") ASC");
 
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
@@ -56,8 +56,8 @@ public class DatabaseUtil {
 
         String selection=DBHelper.ID_COLUMN + " = ? ";
         database=dbHelper.getReadableDatabase();
-        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,selection,new String[]{todoId},null,null,null);
-        cursor.moveToFirst();
+        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,selection,new String[]{todoId},null,null,
+                null);
 
         int id=cursor.getInt(0);
         String title=cursor.getString(1);

@@ -4,7 +4,6 @@ import com.efdalincesu.todolist.DBSqlite.DBHelper;
 import com.google.gson.annotations.SerializedName;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Todo {
@@ -27,7 +26,7 @@ public class Todo {
     private boolean status;
 
     public Todo(int id, String title, String summary, String datenow, String date, boolean status) {
-        this.id=id;
+        this.id = id;
         this.title = title;
         this.summary = summary;
         this.datenow = datenow;
@@ -46,8 +45,24 @@ public class Todo {
     public Todo(String title, String summary, String date) {
         this.title = title;
         this.summary = summary;
-        this.datenow =DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
+        this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
+        this.status = false;
+    }
+
+    public Todo(String title, String summary, boolean status) {
+        this.title = title;
+        this.summary = summary;
+        this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
+        this.date = null;
+        this.status = status;
+    }
+
+    public Todo(String title, String summary) {
+        this.title = title;
+        this.summary = summary;
+        this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
+        this.date = null;
         this.status = false;
     }
 
@@ -99,12 +114,36 @@ public class Todo {
         this.status = status;
     }
 
+    public int getDay() {
+
+        String date = this.date.split(" ")[0];
+        String date1[]=date.split("-");
+        return Integer.parseInt(date1[2]);
+    }
+
+    public int getMonth() {
+
+        String date=this.date.split(" ")[0];
+        String[] date1 = date.split("-");
+
+        return Integer.parseInt(date1[1]);
+    }
+
+    public int getYear() {
+
+        String date=this.date.split(" ")[0];
+        String[] date1 = date.split("-");
+
+        return Integer.parseInt(date1[0]);
+    }
+
     @Override
     public String toString() {
-        return "Title : " + title + "\n" +
-                "Summary : " + summary+ "\n" +
-                "DateNow : " + datenow+ "\n" +
-                "Date : " + date+ "\n" +
+        return "Id : " + id + "\n" +
+                "Title : " + title + "\n" +
+                "Summary : " + summary + "\n" +
+                "DateNow : " + datenow + "\n" +
+                "Date : " + date + "\n" +
                 "Status: " + (status ? " başarılı" : "başarısız");
     }
 }

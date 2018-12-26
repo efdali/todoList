@@ -1,25 +1,34 @@
 package com.efdalincesu.todolist.Ui;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.efdalincesu.todolist.Adapter.ListViewAdapter;
 import com.efdalincesu.todolist.DBSqlite.DatabaseUtil;
+import com.efdalincesu.todolist.Model.Todo;
 import com.efdalincesu.todolist.R;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
@@ -27,51 +36,81 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     int width;
     float dY;
     DatabaseUtil db;
+    Calendar calendar = Calendar.getInstance();
+
+    int day = calendar.get(Calendar.DAY_OF_MONTH);
+    int month = calendar.get(Calendar.MONTH);
+    int year = calendar.get(Calendar.YEAR);
+    String timeString,dateString;
+
     Toolbar toolbar;
     RelativeLayout draggableView;
     EditText todoEt;
-    ImageButton addB;
-    Button timeB,dateB;
-    RelativeLayout dateLinear;
+    ImageButton addB, timeB, dateB;
+    RelativeLayout dateBaseLinear;
+    TextView timeText, dateText;
+    LinearLayout timeLinear, dateLinear;
+    ListView listView;
+    ListViewAdapter adapter;
+    List<Todo> todos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        init();
+        display = getWindowManager().getDefaultDisplay();
+        width = display.getWidth();
+        db = new DatabaseUtil(this);
+        initViews();
+        initVar();
+        db.deleteAllTodo();
+//        db.insertTodo(new Todo("Deneme1","Deneme5","14:30 28.12.2018"));
+//        db.insertTodo(new Todo("Deneme6","Deneme5","27.13.2018"));
+//        db.insertTodo(new Todo("Deneme7","Deneme5","28.12.2018"));
+
+        todos = db.selectTodosASC();
+        adapter = new ListViewAdapter(todos);
+        listView.setAdapter(adapter);
 
 
     }
 
-    public void init() {
+    public void initViews() {
 
-        display = getWindowManager().getDefaultDisplay();
-        width = display.getWidth();
-        db = new DatabaseUtil(this);
+
+        //View init
         draggableView = findViewById(R.id.draggable_view);
         todoEt = findViewById(R.id.todoEdittext);
         addB = findViewById(R.id.addButton);
-        timeB=findViewById(R.id.timeButton);
-        dateB=findViewById(R.id.dateButton);
-        dateLinear=findViewById(R.id.dateLinear);
+        timeB = findViewById(R.id.timeButton);
+        dateB = findViewById(R.id.dateButton);
+        dateBaseLinear = findViewById(R.id.dateBaseLinear);
         toolbar = findViewById(R.id.toolbar);
+        timeText = findViewById(R.id.timeText);
+        dateText = findViewById(R.id.dateText);
+        dateText.setText(dateString);
+        timeLinear = findViewById(R.id.timeLinear);
+        dateLinear = findViewById(R.id.dateLinear);
+        listView = findViewById(R.id.listView);
         setSupportActionBar(toolbar);
-        draggableView.setOnTouchListener(this);
         getSupportActionBar().setTitle("Tüm Görevler");
 
+
+        //View Listeners
+        draggableView.setOnTouchListener(this);
 
         todoEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                    dateLinear.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-                    addB.setBackgroundResource(hasFocus ? R.drawable.ic_up : R.drawable.ic_add);
+                dateBaseLinear.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+                addB.setBackgroundResource(hasFocus ? R.drawable.ic_up : R.drawable.ic_add);
             }
         });
 
         addB.setOnClickListener(this);
-        timeB.setOnClickListener(this);
-        dateB.setOnClickListener(this);
+        timeLinear.setOnClickListener(this);
+        dateLinear.setOnClickListener(this);
     }
 
     @Override
@@ -99,13 +138,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        MenuItem searchItem=menu.findItem(R.id.search);
-        SearchView searchView=null;
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = null;
 
-        if (searchItem!=null)
-            searchView= (SearchView) searchItem.getActionView();
+        if (searchItem != null)
+            searchView = (SearchView) searchItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -115,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(),newText+" text",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), newText + " text", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -126,14 +165,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id=item.getItemId();
+        int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.sign:
-                Toast.makeText(this,"Sign",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sign", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings:
-                Toast.makeText(this,"Settings",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
@@ -141,31 +180,71 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
+        int id = v.getId();
 
-        switch (id){
+        switch (id) {
             case R.id.addButton:
                 if (todoEt.getText().toString().trim().isEmpty()) {
                     todoEt.requestFocus();
-                }else{
+                } else {
+                    String todoTitle = todoEt.getText().toString();
+                    String todoDate = dateString + " " + timeString;
+                    db.insertTodo(new Todo(todoTitle, " ", todoDate));
+                    todos.clear();
+                    todos.addAll(db.selectTodosASC());
+                    adapter.notifyDataSetChanged();
                     todoEt.clearFocus();
                     todoEt.setText("");
+                    initVar();
                 }
                 break;
-            case R.id.timeButton:
+            case R.id.timeLinear:
 
-                TimePickerDialog timePickerDialog=new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        timeB.setDrawableT
+                        timeString = hourOfDay + ":" + (minute<10 ? "0"+minute:minute);
+                        timeText.setText(timeString);
                     }
-                },13,30,true);
+                }, 13, 30, true);
 
+                timePickerDialog.show();
 
                 break;
-            case R.id.dateButton:
-
+            case R.id.dateLinear:
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        dateString = year + "-" + format(month+1)+ "-" + format(dayOfMonth);
+                        dateText.setText(dateString);
+                    }
+                }, year, month, day);
+//                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+                datePickerDialog.show();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.closeConnect();
+    }
+
+
+    public void initVar(){
+
+        timeString = "13:30";
+        dateString = year + "-" + format(month+1) + "-" + format(day);
+        timeText.setText(timeString);
+        dateText.setText(dateString);
+
+    }
+
+
+    public String format(int n){
+
+
+        return n<10 ? "0"+n :n+"";
     }
 }
