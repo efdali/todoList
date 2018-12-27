@@ -1,6 +1,5 @@
 package com.efdalincesu.todolist.Adapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +55,6 @@ public class ListViewAdapter extends BaseAdapter {
         if (position != 0) {
             todo = todos.get(position);
             lastTodo = todos.get(position - 1);
-            Log.d("eklendi", todo.getDate() + " to");
-            Log.d("eklendi", lastTodo.getDate() + " last");
 
 
         } else {
@@ -81,15 +78,14 @@ public class ListViewAdapter extends BaseAdapter {
                     viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
                 } else {
                     viewHolder.day.setVisibility(View.VISIBLE);
-                    viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(),todo.getYear()));
+                    viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(), todo.getYear()));
                     viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
                 }
             } else if (todo.getDate() != null && lastTodo.getDate() == null) {
                 viewHolder.day.setVisibility(View.VISIBLE);
-                viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(),todo.getYear()));
+                viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(), todo.getYear()));
                 viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
             } else {
-                boolean durum = todo.getDate() != null && todo.getDate() == null;
                 if (number == 0) {
                     viewHolder.day.setText("Tarihi Belirsiz");
                     viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
@@ -107,7 +103,7 @@ public class ListViewAdapter extends BaseAdapter {
                 viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
                 number++;
             } else {
-                viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(),todo.getYear()));
+                viewHolder.day.setText(getText(todo.getDay(), todo.getMonth(), todo.getYear()));
                 viewHolder.title.setText(todo.getTitle() + " " + todo.getDate());
             }
         }
@@ -138,10 +134,10 @@ public class ListViewAdapter extends BaseAdapter {
             } else {
                 dayS = "Geçmiş Ay";
             }
-        }else if(todoYear<year){
-            dayS="Geçmiş Yıl";
-        }else{
-            dayS="Gelecek Yıl";
+        } else if (todoYear < year) {
+            dayS = "Geçmiş Yıl";
+        } else {
+            dayS = "Gelecek Yıl";
         }
 
         return dayS;

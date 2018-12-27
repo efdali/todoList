@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     int day = calendar.get(Calendar.DAY_OF_MONTH);
     int month = calendar.get(Calendar.MONTH);
     int year = calendar.get(Calendar.YEAR);
-    String timeString,dateString;
+    String timeString, dateString;
 
     Toolbar toolbar;
     RelativeLayout draggableView;
@@ -64,10 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         db = new DatabaseUtil(this);
         initViews();
         initVar();
-        db.deleteAllTodo();
-//        db.insertTodo(new Todo("Deneme1","Deneme5","14:30 28.12.2018"));
-//        db.insertTodo(new Todo("Deneme6","Deneme5","27.13.2018"));
-//        db.insertTodo(new Todo("Deneme7","Deneme5","28.12.2018"));
 
         todos = db.selectTodosASC();
         adapter = new ListViewAdapter(todos);
@@ -189,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 } else {
                     String todoTitle = todoEt.getText().toString();
                     String todoDate = dateString + " " + timeString;
-                    db.insertTodo(new Todo(todoTitle, " ", todoDate));
+                    if (dateString == null)
+                        db.insertTodo(new Todo(todoTitle, " "));
+                    else
+                        db.insertTodo(new Todo(todoTitle, " ", todoDate));
                     todos.clear();
                     todos.addAll(db.selectTodosASC());
                     adapter.notifyDataSetChanged();
@@ -203,8 +201,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        timeString = hourOfDay + ":" + (minute<10 ? "0"+minute:minute);
+                        timeString = hourOfDay + ":" + format(minute);
                         timeText.setText(timeString);
+                        if (dateString == null)
+                            dateLinear.performClick();
                     }
                 }, 13, 30, true);
 
@@ -215,11 +215,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateString = year + "-" + format(month+1)+ "-" + format(dayOfMonth);
+                        dateString = year + "-" + format(month + 1) + "-" + format(dayOfMonth);
                         dateText.setText(dateString);
                     }
                 }, year, month, day);
-//                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
                 break;
         }
@@ -232,19 +232,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    public void initVar(){
+    public void initVar() {
 
-        timeString = "13:30";
-        dateString = year + "-" + format(month+1) + "-" + format(day);
-        timeText.setText(timeString);
-        dateText.setText(dateString);
+        timeString = "";
+        dateString = null;
+        timeText.setText("");
+        dateText.setText("");
 
     }
 
 
-    public String format(int n){
+    public String format(int n) {
 
 
-        return n<10 ? "0"+n :n+"";
+        return n < 10 ? "0" + n : n + "";
     }
 }

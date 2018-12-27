@@ -117,13 +117,13 @@ public class Todo {
     public int getDay() {
 
         String date = this.date.split(" ")[0];
-        String date1[]=date.split("-");
+        String date1[] = date.split("-");
         return Integer.parseInt(date1[2]);
     }
 
     public int getMonth() {
 
-        String date=this.date.split(" ")[0];
+        String date = this.date.split(" ")[0];
         String[] date1 = date.split("-");
 
         return Integer.parseInt(date1[1]);
@@ -131,7 +131,7 @@ public class Todo {
 
     public int getYear() {
 
-        String date=this.date.split(" ")[0];
+        String date = this.date.split(" ")[0];
         String[] date1 = date.split("-");
 
         return Integer.parseInt(date1[0]);
