@@ -2,8 +2,12 @@ package com.efdalincesu.todolist.Ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
@@ -21,20 +25,29 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.efdalincesu.todolist.Adapter.ListViewAdapter;
+import com.efdalincesu.todolist.Utils.CustomClick;
 import com.efdalincesu.todolist.DBSqlite.DatabaseUtil;
 import com.efdalincesu.todolist.Model.Todo;
 import com.efdalincesu.todolist.R;
+import com.efdalincesu.todolist.Ui.Adapter.ListViewAdapter;
+import com.efdalincesu.todolist.Ui.Fragments.DetailsFragment;
+import com.efdalincesu.todolist.Utils.Auth;
+import com.efdalincesu.todolist.Utils.Util;
 
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, CustomClick {
+
+    public static final String FRAGMENT_TAG = "DetailsFragment";
+    public static final String PAST_TODO_KEY="pref_past";
+    public static final String SYNC_KEY="pref_sync";
+
 
     Display display;
     int width;
     float dY;
-    DatabaseUtil db;
+    static DatabaseUtil db;
     Calendar calendar = Calendar.getInstance();
 
     int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -43,15 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     String timeString, dateString;
 
     Toolbar toolbar;
-    RelativeLayout draggableView;
+    public static CardView draggableView;
     EditText todoEt;
     ImageButton addB, timeB, dateB;
     RelativeLayout dateBaseLinear;
     TextView timeText, dateText;
     LinearLayout timeLinear, dateLinear;
     ListView listView;
-    ListViewAdapter adapter;
-    List<Todo> todos;
+    static ListViewAdapter adapter;
+    static List<Todo> todos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +74,32 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         display = getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         db = new DatabaseUtil(this);
-        initViews();
-        initVar();
-
+        init();
+//        db.deleteAllTodo();
         todos = db.selectTodosASC();
-        adapter = new ListViewAdapter(todos);
+        adapter = new ListViewAdapter(todos, this);
         listView.setAdapter(adapter);
 
 
     }
 
+    public void init(){
+        SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (preferences.getBoolean(PAST_TODO_KEY,false)){
+            int deletedRows=db.deleteOldTodo();
+            Toast.makeText(getApplicationContext(),deletedRows+" adet geçmiş todo silindi." +
+                            "Silinmesini istemiyorsanız ayarlardan kapatabilirsiniz."
+                    ,Toast.LENGTH_LONG).show();
+        }
+
+        initViews();
+        initVar();
+
+    }
+
     public void initViews() {
 
+        Auth.init(this);
 
         //View init
         draggableView = findViewById(R.id.draggable_view);
@@ -118,9 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 float y = event.getRawY() + dY;
                 if (y < (width / 2)) {
 
-                } else if (y > width + draggableView.getWidth() / 4)
-                    draggableView.setVisibility(View.INVISIBLE);
-                else
+                } else if (y > width + draggableView.getWidth() / 4) {
+                    draggableView.setVisibility(View.GONE);
+                    getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG).onDestroy();
+                } else
                     draggableView.setY(y);
                 break;
 
@@ -134,6 +162,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        MenuItem signItem = menu.findItem(R.id.sign);
+        MenuItem syncItem = menu.findItem(R.id.sync);
+
+
+        signItem.setVisible(!Auth.isLogin());
+        syncItem.setVisible(Auth.isLogin());
+
 
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = null;
@@ -149,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(), newText + " text", Toast.LENGTH_SHORT).show();
+                adapter.getFilter().filter(newText);
                 return true;
             }
         });
@@ -164,10 +200,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         switch (id) {
             case R.id.sign:
-                Toast.makeText(this, "Sign", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SignActivity.class));
+                break;
+            case R.id.sync:
+                Toast.makeText(this,"Sync",Toast.LENGTH_LONG).show();
                 break;
             case R.id.settings:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,SettingsActivity.class));
                 break;
         }
         return true;
@@ -182,15 +221,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (todoEt.getText().toString().trim().isEmpty()) {
                     todoEt.requestFocus();
                 } else {
-                    String todoTitle = todoEt.getText().toString();
+                    String todoTitle = todoEt.getText().toString().trim();
                     String todoDate = dateString + " " + timeString;
                     if (dateString == null)
-                        db.insertTodo(new Todo(todoTitle, " "));
+                        db.insertTodo(new Todo(todoTitle, ""));
                     else
-                        db.insertTodo(new Todo(todoTitle, " ", todoDate));
-                    todos.clear();
-                    todos.addAll(db.selectTodosASC());
-                    adapter.notifyDataSetChanged();
+                        db.insertTodo(new Todo(todoTitle, "", todoDate));
+                    refreshAdapter();
                     todoEt.clearFocus();
                     todoEt.setText("");
                     initVar();
@@ -201,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        timeString = hourOfDay + ":" + format(minute);
+                        timeString = hourOfDay + ":" + Util.format(minute);
                         timeText.setText(timeString);
                         if (dateString == null)
                             dateLinear.performClick();
@@ -215,11 +252,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        dateString = year + "-" + format(month + 1) + "-" + format(dayOfMonth);
+                        dateString = year + "-" + Util.format(month + 1) + "-" + Util.format(dayOfMonth);
                         dateText.setText(dateString);
                     }
                 }, year, month, day);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+//                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
                 break;
         }
@@ -242,9 +279,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
 
-    public String format(int n) {
+    @Override
+    public void click(Todo todo) {
+        draggableView.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.draggable_view, DetailsFragment.getFragment(todo), FRAGMENT_TAG).commit();
 
+    }
 
-        return n < 10 ? "0" + n : n + "";
+    public static void refreshAdapter() {
+        todos.clear();
+        todos.addAll(db.selectTodosASC());
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshAdapter();
     }
 }

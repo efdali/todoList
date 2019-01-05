@@ -3,10 +3,11 @@ package com.efdalincesu.todolist.Model;
 import com.efdalincesu.todolist.DBSqlite.DBHelper;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class Todo {
+public class Todo implements Serializable {
 
     @SerializedName(DBHelper.ID_COLUMN)
     private int id;
@@ -116,25 +117,46 @@ public class Todo {
 
     public int getDay() {
 
-        String date = this.date.split(" ")[0];
-        String date1[] = date.split("-");
-        return Integer.parseInt(date1[2]);
+        if (date != null) {
+            String date = this.date.split(" ")[0];
+            String date1[] = date.split("-");
+            return Integer.parseInt(date1[2]);
+        } else
+            return 0;
     }
 
     public int getMonth() {
 
-        String date = this.date.split(" ")[0];
-        String[] date1 = date.split("-");
+        if (date != null) {
+            String date = this.date.split(" ")[0];
+            String[] date1 = date.split("-");
 
-        return Integer.parseInt(date1[1]);
+            return Integer.parseInt(date1[1]);
+        } else
+            return 0;
     }
 
     public int getYear() {
+        if (date != null) {
+            String date = this.date.split(" ")[0];
+            String[] date1 = date.split("-");
 
-        String date = this.date.split(" ")[0];
-        String[] date1 = date.split("-");
+            return Integer.parseInt(date1[0]);
+        } else
+            return 0;
+    }
 
-        return Integer.parseInt(date1[0]);
+    public String getTime() {
+
+        if (date != null) {
+            String[] date = this.date.split(" ");
+
+            if (date.length > 1) {
+                return date[1];
+            } else
+                return "";
+        } else
+            return "";
     }
 
     @Override

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/past_todo_category">
+        <SwitchPreference android:key="pref_past"
+            android:title="@string/past_todo_title"
+            android:summary="@string/past_todo_summary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/past_todo_category">
+        <SwitchPreference android:key="pref_sync"
+            android:title="@string/sync_title"
+            android:summary="@string/sync_summary"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

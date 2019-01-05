@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TODO List</string>
+
+
+    <!-- Preferences Strings-->
+    <string name="past_todo_category">Geçmiş TODO\'s</string>
+    <string name="past_todo_title">Geçmiş Todolar</string>
+    <string name="past_todo_summary">Tarihi geçen todolar silinsin mi?</string>
+    <string name="sync_category">Yedekleme</string>
+    <string name="sync_title">Senkronizasyon</string>
+    <string name="sync_summary">Todoların devamlılığı için yedekleme yapılsın mı?</string>
+
+
 </resources>

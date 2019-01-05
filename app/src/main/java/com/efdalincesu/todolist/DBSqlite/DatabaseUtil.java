@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.efdalincesu.todolist.Model.Todo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class DatabaseUtil {
 
@@ -138,6 +140,22 @@ public class DatabaseUtil {
         int count=cursor.getInt(0);
         cursor.close();
         return count;
+    }
+
+    public int deleteOldTodo(){
+
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar=Calendar.getInstance();
+        calendar.add(Calendar.DATE, -3);
+        String date=format.format(calendar.getTime());
+
+        database=dbHelper.getWritableDatabase();
+        String selection=DBHelper.DATE_COLUMN + " < ? ";
+        String[] selectionArgs={date};
+
+        int deletedRows=database.delete(DBHelper.TABLE_NAME,selection,selectionArgs);
+
+        return deletedRows;
     }
 
 }

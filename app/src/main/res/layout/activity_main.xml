@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Ui.MainActivity">
 
     <RelativeLayout
@@ -130,12 +131,22 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
         android:id="@+id/draggable_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="500dp"
         android:layout_gravity="bottom|right"
-        android:background="#f55e"
-        android:visibility="gone"></RelativeLayout>
+        android:visibility="gone"
+        app:cardBackgroundColor="#f55"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true">
+        <View
+            android:layout_width="220dp"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
+    </android.support.v7.widget.CardView>
 
 </FrameLayout>
