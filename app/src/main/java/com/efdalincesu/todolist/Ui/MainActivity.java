@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 startActivity(new Intent(this, SignActivity.class));
                 break;
             case R.id.sync:
-                Toast.makeText(this,"Sync",Toast.LENGTH_LONG).show();
+                refreshAdapter();
                 break;
             case R.id.settings:
                 startActivity(new Intent(this,SettingsActivity.class));

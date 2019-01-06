@@ -29,10 +29,10 @@ import com.efdalincesu.todolist.Utils.Util;
 public class DetailsFragment extends Fragment implements TextWatcher {
 
     Todo todo;
-    TextView titleTV, summaryTV, dateTV, dateNowTV, hatirlaticiTV;
+    TextView titleTV, summaryTV, dateTV, dateNowTV, reminderTV;
     EditText titleET, summaryET, dateNowET;
     Button deleteTodo;
-    CardView cardDate, cardHatirlatici;
+    CardView cardDate, cardReminder;
     DatabaseUtil databaseUtil;
     Switch todoState;
 
@@ -69,12 +69,13 @@ public class DetailsFragment extends Fragment implements TextWatcher {
         summaryTV = view.findViewById(R.id.summaryTV);
         dateTV = view.findViewById(R.id.dateTV);
         dateNowTV = view.findViewById(R.id.dateNowTV);
+        reminderTV=view.findViewById(R.id.reminderTV);
         titleET = view.findViewById(R.id.titleET);
         summaryET = view.findViewById(R.id.summaryET);
         dateNowET = view.findViewById(R.id.dateNowET);
         deleteTodo = view.findViewById(R.id.deleteBt);
         cardDate = view.findViewById(R.id.card_date);
-        cardHatirlatici = view.findViewById(R.id.card_hatirlatici);
+        cardReminder = view.findViewById(R.id.card_reminder);
         todoState = view.findViewById(R.id.todoState);
 
         readBundle(getArguments());
@@ -83,6 +84,7 @@ public class DetailsFragment extends Fragment implements TextWatcher {
         titleET.setText(todo.getTitle());
         summaryET.setText(todo.getSummary());
         dateTV.setText((todo.getDate()==null ? "Tarihi Belirsiz" : todo.getDate()));
+        reminderTV.setText(todo.getReminder()== null ? "Kapalı" : todo.getReminder());
         dateNowET.setText(todo.getDatenow());
         todoState.setChecked(todo.isStatus());
 

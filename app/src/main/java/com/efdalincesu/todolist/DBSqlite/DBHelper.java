@@ -14,11 +14,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SUMMARY_COLUMN="todo_summary";
     public static final String DATENOW_COLUMN="todo_datenow";
     public static final String DATE_COLUMN="todo_date";
+    public static final String REMINDER_COLUMN="todo_reminder";
     public static final String STATUS_COLUMN="todo_status";
 
     private String createTable="CREATE TABLE " + TABLE_NAME +
             "(" + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " + TITLE_COLUMN + " TEXT, "+ SUMMARY_COLUMN + " TEXT, " +
-            DATENOW_COLUMN + " TEXT, " + DATE_COLUMN + " TEXT, " + STATUS_COLUMN + " INTEGER )";
+            DATENOW_COLUMN + " TEXT, " + DATE_COLUMN + " TEXT, " + REMINDER_COLUMN + " TEXT, " + STATUS_COLUMN + " INTEGER )";
 
     private String deleteTable="DROP TABLE IF EXISTS " + TABLE_NAME;
 

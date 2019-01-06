@@ -85,7 +85,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/card_hatirlatici"
+            android:id="@+id/card_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -107,7 +107,7 @@
                     android:text="Todo Hatırlatıcı" />
 
                 <TextView
-                    android:id="@+id/hatirlatici"
+                    android:id="@+id/reminderTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

@@ -37,7 +37,8 @@ public class DatabaseUtil {
             String summary=cursor.getString(2);
             String datenow=cursor.getString(3);
             String date=cursor.getString(4);
-            int statusInt=cursor.getInt(5);
+            String reminder=cursor.getString(5);
+            int statusInt=cursor.getInt(6);
             boolean status;
 
             if (statusInt==0){
@@ -47,7 +48,7 @@ public class DatabaseUtil {
             }
 
 
-            Todo todo=new Todo(id,title,summary,datenow,date,status);
+            Todo todo=new Todo(id,title,summary,datenow,date,reminder,status);
             todos.add(todo);
         }
 
@@ -66,7 +67,8 @@ public class DatabaseUtil {
         String summary=cursor.getString(2);
         String datenow=cursor.getString(3);
         String date=cursor.getString(4);
-        int statusInt=cursor.getInt(5);
+        String reminder=cursor.getString(5);
+        int statusInt=cursor.getInt(6);
         boolean status;
         if (statusInt==0){
             status=false;
@@ -74,7 +76,7 @@ public class DatabaseUtil {
             status=true;
         }
 
-        Todo todo=new Todo(id,title,summary,datenow,date,status);
+        Todo todo=new Todo(id,title,summary,datenow,date,reminder,status);
 
         return todo;
     }

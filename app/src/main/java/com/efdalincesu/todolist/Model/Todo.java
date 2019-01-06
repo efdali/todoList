@@ -23,15 +23,20 @@ public class Todo implements Serializable {
     @SerializedName(DBHelper.DATE_COLUMN)
     private String date;
 
+    @SerializedName(DBHelper.REMINDER_COLUMN)
+    private String reminder;
+
     @SerializedName(DBHelper.STATUS_COLUMN)
     private boolean status;
 
-    public Todo(int id, String title, String summary, String datenow, String date, boolean status) {
+
+    public Todo(int id, String title, String summary, String datenow, String date, String reminder, boolean status) {
         this.id = id;
         this.title = title;
         this.summary = summary;
         this.datenow = datenow;
         this.date = date;
+        this.reminder=reminder;
         this.status = status;
     }
 
@@ -40,6 +45,7 @@ public class Todo implements Serializable {
         this.summary = summary;
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
+        this.reminder=null;
         this.status = status;
     }
 
@@ -48,6 +54,7 @@ public class Todo implements Serializable {
         this.summary = summary;
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
+        this.reminder=null;
         this.status = false;
     }
 
@@ -56,6 +63,7 @@ public class Todo implements Serializable {
         this.summary = summary;
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = null;
+        this.reminder=null;
         this.status = status;
     }
 
@@ -64,6 +72,7 @@ public class Todo implements Serializable {
         this.summary = summary;
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = null;
+        this.reminder=null;
         this.status = false;
     }
 
@@ -105,6 +114,14 @@ public class Todo implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(String reminder) {
+        this.reminder = reminder;
     }
 
     public boolean isStatus() {
