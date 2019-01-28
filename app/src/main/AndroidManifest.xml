@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.efdalincesu.todolist">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SET_ALARM"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,8 +24,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".Ui.MainActivity" />
-        <activity android:name=".Ui.SignActivity"></activity>
-        <activity android:name=".Ui.SettingsActivity"/>
+        <activity android:name=".Ui.SettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Ui.AlarmActivity"/>
+        <receiver android:name=".Services.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Services.NotifReceiver"></receiver>
+
+        <service
+            android:name=".Services.AlarmManagerService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

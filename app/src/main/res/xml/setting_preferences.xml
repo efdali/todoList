@@ -7,10 +7,25 @@
             android:summary="@string/past_todo_summary"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/past_todo_category">
-        <SwitchPreference android:key="pref_sync"
-            android:title="@string/sync_title"
-            android:summary="@string/sync_summary"/>
+    <PreferenceCategory android:title="@string/alarm_category">
+        <ListPreference
+            android:defaultValue="@string/alarm_default_value"
+            android:dialogTitle="@string/alarm_dialog_title"
+            android:entries="@array/alarm_entries"
+            android:entryValues="@array/alarm_values"
+            android:key="alarm"
+            android:summary="@string/alarm_summary"
+            android:title="@string/alarm_title" />
+
+        <ListPreference
+            android:defaultValue="@string/alarm_schedule_default_value"
+            android:dialogTitle="@string/alarm_schedule_dialog_title"
+            android:entries="@array/alarm_schedule_entries"
+            android:entryValues="@array/alarm_schedule_values"
+            android:key="alarm_schedule"
+            android:summary="@string/alarm_schedule_summary"
+            android:title="@string/alarm_schedule_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

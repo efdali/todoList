@@ -1,5 +1,7 @@
 package com.efdalincesu.todolist.Model;
 
+import android.util.Log;
+
 import com.efdalincesu.todolist.DBSqlite.DBHelper;
 import com.google.gson.annotations.SerializedName;
 
@@ -49,9 +51,9 @@ public class Todo implements Serializable {
         this.status = status;
     }
 
-    public Todo(String title, String summary, String date) {
+    public Todo(String title, String date) {
         this.title = title;
-        this.summary = summary;
+        this.summary = "";
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = date;
         this.reminder=null;
@@ -67,9 +69,9 @@ public class Todo implements Serializable {
         this.status = status;
     }
 
-    public Todo(String title, String summary) {
+    public Todo(String title) {
         this.title = title;
-        this.summary = summary;
+        this.summary = "";
         this.datenow = DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
         this.date = null;
         this.reminder=null;
@@ -174,6 +176,26 @@ public class Todo implements Serializable {
                 return "";
         } else
             return "";
+    }
+
+    public int getReminderHour(){
+        if (reminder != null) {
+            String date = this.reminder.split(" ")[1];
+            String[] date1 = date.split(":");
+
+            return Integer.parseInt(date1[0]);
+        } else
+            return -1;
+    }
+
+    public int getReminderMinute(){
+        if (reminder != null) {
+            String date = this.reminder.split(" ")[1];
+            String[] date1 = date.split(":");
+
+            return Integer.parseInt(date1[1]);
+        } else
+            return -1;
     }
 
     @Override

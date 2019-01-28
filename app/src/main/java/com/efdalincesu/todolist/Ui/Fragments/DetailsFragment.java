@@ -26,7 +26,7 @@ import com.efdalincesu.todolist.R;
 import com.efdalincesu.todolist.Ui.MainActivity;
 import com.efdalincesu.todolist.Utils.Util;
 
-public class DetailsFragment extends Fragment implements TextWatcher {
+public class DetailsFragment extends Fragment implements TextWatcher, View.OnClickListener {
 
     Todo todo;
     TextView titleTV, summaryTV, dateTV, dateNowTV, reminderTV;
@@ -38,6 +38,7 @@ public class DetailsFragment extends Fragment implements TextWatcher {
 
     String dateString = null;
     String timeString = "";
+    String reminderString = null;
 
     public static DetailsFragment getFragment(Todo todo) {
 
@@ -69,7 +70,7 @@ public class DetailsFragment extends Fragment implements TextWatcher {
         summaryTV = view.findViewById(R.id.summaryTV);
         dateTV = view.findViewById(R.id.dateTV);
         dateNowTV = view.findViewById(R.id.dateNowTV);
-        reminderTV=view.findViewById(R.id.reminderTV);
+        reminderTV = view.findViewById(R.id.reminderTV);
         titleET = view.findViewById(R.id.titleET);
         summaryET = view.findViewById(R.id.summaryET);
         dateNowET = view.findViewById(R.id.dateNowET);
@@ -83,74 +84,21 @@ public class DetailsFragment extends Fragment implements TextWatcher {
 
         titleET.setText(todo.getTitle());
         summaryET.setText(todo.getSummary());
-        dateTV.setText((todo.getDate()==null ? "Tarihi Belirsiz" : todo.getDate()));
-        reminderTV.setText(todo.getReminder()== null ? "Kapalı" : todo.getReminder());
+        dateTV.setText((todo.getDate() == null ? "Tarihi Belirsiz" : todo.getDate()));
+        reminderTV.setText(todo.getReminder() == null ? "Kapalı" : todo.getReminder());
         dateNowET.setText(todo.getDatenow());
         todoState.setChecked(todo.isStatus());
 
-        deleteTodo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseUtil.deleteTodo(todo.getId());
-                MainActivity.draggableView.setVisibility(View.GONE);
-                onDestroy();
-            }
-        });
-
-        cardDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dateString = null;
-                timeString = "";
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                final DatePicker picker = new DatePicker(getContext());
-                picker.setMinDate(System.currentTimeMillis() - 1000);
-                builder.setView(picker);
-                builder.setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dateString = picker.getYear() + "-" + Util.format(picker.getMonth() + 1) + "-" + Util.format(picker.getDayOfMonth());
-                        dateTV.setText(dateString);
-                        dialog.dismiss();
-                        update();
-                    }
-                });
-                builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Saat Seç", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dateString = picker.getYear() + "-" + Util.format(picker.getMonth() + 1) + "-" + Util.format(picker.getDayOfMonth());
-                        dateTV.setText(dateString);
-
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                timeString = hourOfDay + ":" + Util.format(minute);
-                                dateString = dateString + " " + timeString;
-                                dateTV.setText(dateString);
-                                update();
-                            }
-                        }, 13, 30, true);
-
-                        timePickerDialog.show();
-                    }
-                });
-                builder.create().show();
-            }
-        });
+        deleteTodo.setOnClickListener(this);
+        cardDate.setOnClickListener(this);
+        cardReminder.setOnClickListener(this);
 
         titleET.addTextChangedListener(this);
         summaryET.addTextChangedListener(this);
         return view;
     }
 
-    public void update() {
+    public void updateDate() {
         if (dateString != null) {
             if (timeString.equals(""))
                 dateString = dateString + " " + todo.getTime();
@@ -158,6 +106,11 @@ public class DetailsFragment extends Fragment implements TextWatcher {
             todo.setDate(dateString);
             databaseUtil.updateTodo(todo);
         }
+    }
+
+    public void updateReminder() {
+        todo.setReminder(reminderString);
+        databaseUtil.updateTodo(todo);
     }
 
     @Override
@@ -181,5 +134,118 @@ public class DetailsFragment extends Fragment implements TextWatcher {
     public void onDestroy() {
         super.onDestroy();
         MainActivity.refreshAdapter();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.card_date:
+                showTodoDatePicker();
+                break;
+
+            case R.id.card_reminder:
+                showTodoReminderPicker();
+                break;
+
+            case R.id.deleteBt:
+                databaseUtil.deleteTodo(todo.getId());
+                MainActivity.draggableView.setVisibility(View.GONE);
+                onDestroy();
+                break;
+        }
+    }
+
+    private void showTodoReminderPicker() {
+        dateString = null;
+        timeString = "";
+
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String timeString = hourOfDay + ":" + Util.format(minute);
+                reminderString = reminderString + " " + timeString;
+                reminderTV.setText(reminderString);
+                updateReminder();
+            }
+        }, 13, 30, true);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final DatePicker picker = new DatePicker(getContext());
+        picker.setMinDate(System.currentTimeMillis() - 1000);
+        builder.setView(picker);
+        builder.setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reminderString = picker.getYear() + "-" + Util.format(picker.getMonth() + 1) + "-" + Util.format(picker.getDayOfMonth());
+                reminderTV.setText(reminderString);
+                dialog.dismiss();
+                timePickerDialog.show();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNeutralButton("Hatırlatıcıyı Kapat", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reminderString = null;
+                reminderTV.setText("Kapalı");
+                updateReminder();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void showTodoDatePicker() {
+
+        dateString = null;
+        timeString = "";
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final DatePicker picker = new DatePicker(getContext());
+        picker.setMinDate(System.currentTimeMillis() - 1000);
+        builder.setView(picker);
+        builder.setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dateString = picker.getYear() + "-" + Util.format(picker.getMonth() + 1) + "-" + Util.format(picker.getDayOfMonth());
+                dateTV.setText(dateString);
+                dialog.dismiss();
+                updateDate();
+            }
+        });
+        builder.setNegativeButton("İptal", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setNeutralButton("Saat Seç", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dateString = picker.getYear() + "-" + Util.format(picker.getMonth() + 1) + "-" + Util.format(picker.getDayOfMonth());
+                dateTV.setText(dateString);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        timeString = hourOfDay + ":" + Util.format(minute);
+                        dateString = dateString + " " + timeString;
+                        dateTV.setText(dateString);
+                        updateDate();
+                    }
+                }, 13, 30, true);
+
+                timePickerDialog.show();
+            }
+        });
+        builder.create().show();
+
+
     }
 }

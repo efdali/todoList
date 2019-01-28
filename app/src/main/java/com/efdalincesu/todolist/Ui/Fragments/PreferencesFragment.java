@@ -14,5 +14,6 @@ public class PreferencesFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.setting_preferences);
 
 
+
     }
 }

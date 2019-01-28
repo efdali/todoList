@@ -6,9 +6,47 @@
     <string name="past_todo_category">Geçmiş TODO\'s</string>
     <string name="past_todo_title">Geçmiş Todolar</string>
     <string name="past_todo_summary">Tarihi geçen todolar silinsin mi?</string>
-    <string name="sync_category">Yedekleme</string>
-    <string name="sync_title">Senkronizasyon</string>
-    <string name="sync_summary">Todoların devamlılığı için yedekleme yapılsın mı?</string>
+    <string name="alarm_category">Alarm</string>
+    <string name="alarm_title">Alarm </string>
+    <string name="alarm_dialog_title">Alarm Dakika</string>
+    <string name="alarm_default_value">0</string>
+    <string name="alarm_summary">Alarmlar Kaç Dakika Erken Çalsın?</string>
 
+    <string-array name="alarm_entries">
+        <item>Zamanında Çalsın</item>
+        <item>10 Dakika</item>
+        <item>20 Dakika</item>
+        <item>30 Dakika</item>
+        <item>1 Saat</item>
+    </string-array>
+
+    <string-array name="alarm_values">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <string name="alarm_schedule_title">Alarm Ertele</string>
+    <string name="alarm_schedule_dialog_title">Alarm Erteleme</string>
+    <string name="alarm_schedule_default_value">5</string>
+    <string name="alarm_schedule_summary">Alarmlar Kaç Dakika Ertelensin?</string>
+
+    <string-array name="alarm_schedule_entries">
+        <item>1 Dakika</item>
+        <item>5 Dakika</item>
+        <item>10 Dakika</item>
+        <item>15 Dakika</item>
+        <item>30 Dakika</item>
+    </string-array>
+
+    <string-array name="alarm_schedule_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+    </string-array>
 
 </resources>

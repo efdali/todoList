@@ -1,136 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Ui.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
 
         <include
             android:id="@+id/included"
-            layout="@layout/toolbar_layout" />
+            layout="@layout/toolbar_layout"
+            app:layout_constraintBottom_toTopOf="parent" />
 
-        <ListView
-            android:id="@+id/listView"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/included"></ListView>
-
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/listView"
-        android:layout_gravity="bottom"
-        android:background="#B0BEC5"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/dateBaseLinear"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="5dp"
-            android:visibility="gone">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linear"
+            app:layout_constraintTop_toBottomOf="@+id/included">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/timeLinear"
-                android:clickable="true">
+                android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/timeButton"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/time_button"
-                    android:clickable="false"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/timeText"
-                    android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/container1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/belirsiz"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Belirsiz"
+                            android:textStyle="bold"
+                            android:textSize="20sp"/>
+
+                        <ImageButton
+                            android:id="@+id/ok1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:clickable="false"/>
+
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/belirsizRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="13:30"
-                    android:layout_gravity="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:clickable="false"
-                    android:paddingLeft="5dp"/>
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/container2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/bugun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bugün"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/ok2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:clickable="false"/>
+
+                    </RelativeLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/todayRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/container3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/yarın"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Yarın"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/ok3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:clickable="false"/>
+
+                    </RelativeLayout>
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/tommorowRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/container4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/gecmis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Geçmiş"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/ok4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:clickable="false"/>
+
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/pastRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/container5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true">
+
+                        <TextView
+                            android:id="@+id/gelecek"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Gelecek"
+                            android:textStyle="bold"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/ok5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/ic_arrow_down"
+                            android:clickable="false"/>
+
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/futureRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentRight="true"
-                android:id="@+id/dateLinear"
-                android:clickable="true">
+        </ScrollView>
 
-                <ImageButton
-                    android:id="@+id/dateButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/date_button"
-                    android:clickable="false"/>
-
-                <TextView
-                    android:id="@+id/dateText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12.12.2018"
-                    android:layout_gravity="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:clickable="false"
-                    android:paddingLeft="5dp"/>
-
-            </LinearLayout>
-        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:weightSum="5">
+            android:layout_gravity="bottom"
+            android:background="#B0BEC5"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/constL">
 
-            <EditText
-                android:id="@+id/todoEdittext"
-                android:layout_width="0dp"
+            <RelativeLayout
+                android:id="@+id/dateBaseLinear"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="5"
-                android:background="@drawable/border"
-                android:hint="TODO"
-                android:paddingLeft="10dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
                 android:paddingTop="5dp"
-                android:paddingRight="5dp"
-                android:paddingBottom="5dp" />
+                android:visibility="visible">
 
-            <ImageButton
-                android:id="@+id/addButton"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/timeLinear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/timeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/time_button"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:id="@+id/timeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clickable="false"
+                        android:paddingLeft="5dp"
+                        android:text="13:30"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dateLinear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/dateButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/date_button"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:id="@+id/dateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clickable="false"
+                        android:paddingLeft="5dp"
+                        android:text="12.12.2018"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ic_add" />
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:weightSum="5">
+
+                <EditText
+                    android:id="@+id/todoEdittext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/border"
+                    android:hint="TODO"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp" />
+
+                <ImageButton
+                    android:id="@+id/addButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/ic_add" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
+
+    <!--Draggable View-->
     <android.support.v7.widget.CardView
         android:id="@+id/draggable_view"
         android:layout_width="match_parent"
@@ -141,12 +353,13 @@
         app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
+
         <View
             android:layout_width="220dp"
             android:layout_height="1dp"
-            android:background="@color/black"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:background="@color/black" />
     </android.support.v7.widget.CardView>
 
 </FrameLayout>

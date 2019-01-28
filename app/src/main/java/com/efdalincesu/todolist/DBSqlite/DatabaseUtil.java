@@ -4,12 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.efdalincesu.todolist.Model.Todo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DatabaseUtil {
 
@@ -89,6 +91,7 @@ public class DatabaseUtil {
         values.put(DBHelper.SUMMARY_COLUMN,todo.getSummary());
         values.put(DBHelper.DATENOW_COLUMN,todo.getDatenow());
         values.put(DBHelper.DATE_COLUMN,todo.getDate());
+        values.put(DBHelper.REMINDER_COLUMN,todo.getReminder());
         values.put(DBHelper.STATUS_COLUMN,todo.isStatus());
 
         long value=database.insert(DBHelper.TABLE_NAME,null,values);
@@ -104,6 +107,7 @@ public class DatabaseUtil {
         values.put(DBHelper.SUMMARY_COLUMN,todo.getSummary());
         values.put(DBHelper.DATENOW_COLUMN,todo.getDatenow());
         values.put(DBHelper.DATE_COLUMN,todo.getDate());
+        values.put(DBHelper.REMINDER_COLUMN,todo.getReminder());
         values.put(DBHelper.STATUS_COLUMN,todo.isStatus());
 
 
@@ -148,7 +152,7 @@ public class DatabaseUtil {
 
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar=Calendar.getInstance();
-        calendar.add(Calendar.DATE, -3);
+        calendar.add(Calendar.DATE, -1);
         String date=format.format(calendar.getTime());
 
         database=dbHelper.getWritableDatabase();
@@ -159,5 +163,39 @@ public class DatabaseUtil {
 
         return deletedRows;
     }
+
+    public ArrayList<Todo> selectTodosNotNull(){
+
+        ArrayList<Todo> todos=new ArrayList<>();
+        database=dbHelper.getReadableDatabase();
+        String selection=DBHelper.DATE_COLUMN+" is not null";
+        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,selection,null,null,null,
+                null);
+
+        while (cursor.moveToNext()){
+            int id=cursor.getInt(0);
+            String title=cursor.getString(1);
+            String summary=cursor.getString(2);
+            String datenow=cursor.getString(3);
+            String date=cursor.getString(4);
+            String reminder=cursor.getString(5);
+            int statusInt=cursor.getInt(6);
+            boolean status;
+
+            if (statusInt==0){
+                status=false;
+            }else{
+                status=true;
+            }
+
+
+            Todo todo=new Todo(id,title,summary,datenow,date,reminder,status);
+            todos.add(todo);
+        }
+
+        return todos;
+    }
+
+
 
 }

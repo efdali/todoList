@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/todo_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/day"
-        android:visibility="gone"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/todoTitle"
-        android:textSize="18sp"
-        android:textColor="@color/titleColor"
-        android:layout_below="@+id/day"
-        android:paddingLeft="25dp"
-        android:paddingTop="2dp"/>
 
-</LinearLayout>
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:button="@drawable/checkbox_style"
+        android:padding="2dp" />
+
+    <TextView
+        android:id="@+id/todoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/checkBox"
+        android:textColor="@color/titleColor"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
+
+    <ImageButton
+        android:id="@+id/deleteB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/ic_clear"
+        android:visibility="gone" />
+
+</RelativeLayout>
