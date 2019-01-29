@@ -6,13 +6,14 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.util.Calendar;
 
 public class AlarmManagerService extends Service {
 
     AlarmManager alarmManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,11 +23,12 @@ public class AlarmManagerService extends Service {
 
         Intent intent = new Intent(getBaseContext(), NotifReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 1, intent, 0);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager= (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pendingIntent);
-
 
     }
 

@@ -100,9 +100,6 @@ public class DetailsFragment extends Fragment implements TextWatcher, View.OnCli
 
     public void updateDate() {
         if (dateString != null) {
-            if (timeString.equals(""))
-                dateString = dateString + " " + todo.getTime();
-
             todo.setDate(dateString);
             databaseUtil.updateTodo(todo);
         }
@@ -234,7 +231,7 @@ public class DetailsFragment extends Fragment implements TextWatcher, View.OnCli
                 TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        timeString = hourOfDay + ":" + Util.format(minute);
+                        timeString = Util.format(hourOfDay) + ":" + Util.format(minute);
                         dateString = dateString + " " + timeString;
                         dateTV.setText(dateString);
                         updateDate();

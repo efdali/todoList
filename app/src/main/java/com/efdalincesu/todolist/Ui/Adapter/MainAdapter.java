@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.efdalincesu.todolist.DBSqlite.DatabaseUtil;
 import com.efdalincesu.todolist.Model.Todo;
 import com.efdalincesu.todolist.R;
+import com.efdalincesu.todolist.Ui.MainActivity;
 import com.efdalincesu.todolist.Utils.CustomClick;
 
 import java.util.ArrayList;
@@ -53,8 +55,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> im
         final DatabaseUtil db = new DatabaseUtil(context);
         final Todo todo = filteredList.get(position);
 
-        viewHolder.title.setText(todo.getTitle());
-
+        viewHolder.title.setText(todo.getTitle()+" "+ todo.getTime());
+        viewHolder.checkBox.setChecked(false);
         viewHolder.todoContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +77,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> im
             public void onClick(View v) {
                 db.deleteTodo(todo.getId());
                 filteredList.remove(todo);
-                notifyItemRemoved(position);
                 notifyDataSetChanged();
             }
         });

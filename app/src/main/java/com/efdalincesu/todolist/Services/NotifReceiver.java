@@ -27,26 +27,25 @@ import java.util.Calendar;
 
 public class NotifReceiver extends BroadcastReceiver {
 
-    private final int NOTIFICATION_ID=1;
+    private final int NOTIFICATION_ID = 1;
     AlarmManager alarmManager;
     int alarm;
-    private final String ALARM_KEY="alarm";
+    private final String ALARM_KEY = "alarm";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        DatabaseUtil db=new DatabaseUtil(context);
+        DatabaseUtil db = new DatabaseUtil(context);
 
 
-        SharedPreferences preferences= PreferenceManager.getDefaultSharedPreferences(context);
-        alarm=Integer.parseInt(preferences.getString(ALARM_KEY,"0"));
-        alarmManager= (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        NotificationManager manager= (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        alarm = Integer.parseInt(preferences.getString(ALARM_KEY, "0"));
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(context.getApplicationContext());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context.getApplicationContext());
 
-        ArrayList<Todo> todos= Util.isToday(db.selectTodosNotNull());
-
+        ArrayList<Todo> todos = Util.isToday(db.selectTodosNotNull());
 
 
         Intent intent1 = new Intent(context, MainActivity.class);
@@ -54,7 +53,7 @@ public class NotifReceiver extends BroadcastReceiver {
 
         Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
 
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         builder.setAutoCancel(true);
         builder.setVibrate(new long[]{1000, 500});
@@ -67,7 +66,7 @@ public class NotifReceiver extends BroadcastReceiver {
 
             builder.setContentTitle(todos.get(0).getTitle());
             builder.setContentText(todos.get(0).getSummary() + " Açıklama");
-            builder.addAction(R.drawable.ic_clear,"Sil",pendingIntent);
+            builder.addAction(R.drawable.ic_clear, "Sil", pendingIntent);
 
         } else if (todos.size() > 1) {
 
@@ -82,29 +81,29 @@ public class NotifReceiver extends BroadcastReceiver {
             builder.setStyle(bigTextStyle);
         }
 
-        Calendar calendar=Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
 
-        if (todos.size()>0){
+        if (todos.size() > 0) {
 
-            for (Todo todo:todos){
-                if (todo.getReminder()!=null || todo.getReminder().trim().equals("")){
+            for (Todo todo : todos) {
+                if (todo.getReminder() != null) {
 
-                    Intent intent2=new Intent(context, AlarmActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("todo",todo);
+                    Intent intent2 = new Intent(context, AlarmActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("todo", todo);
                     intent2.putExtras(bundle);
-                    PendingIntent pendingIntent1=PendingIntent.getActivity(context,0,intent2,0);
+                    PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent2, 0);
                     calendar.setTimeInMillis(System.currentTimeMillis());
-                    calendar.set(Calendar.HOUR_OF_DAY,todo.getReminderHour());
-                    calendar.set(Calendar.MINUTE,(todo.getReminderMinute()+alarm));
-                    alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent1);
+                    calendar.set(Calendar.HOUR_OF_DAY, todo.getReminderHour());
+                    calendar.set(Calendar.MINUTE, (todo.getReminderMinute() + alarm));
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent1);
                 }
             }
 
         }
 
-
-        manager.notify(NOTIFICATION_ID, builder.build());
+        if (todos.size() > 0)
+            manager.notify(NOTIFICATION_ID, builder.build());
 
     }
 }

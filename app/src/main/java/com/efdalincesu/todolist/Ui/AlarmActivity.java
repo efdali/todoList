@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,7 +26,7 @@ import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    private final String ALARM_SCHEDULE_KEY="alarm_schedule";
+    private final String ALARM_SCHEDULE_KEY = "alarm_schedule";
     Uri uri;
     ImageButton kapat, ertele, alarm;
     TextView title, summary, time;
@@ -46,9 +45,9 @@ public class AlarmActivity extends AppCompatActivity implements View.OnTouchList
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
             todo = (Todo) bundle.getSerializable("todo");
-        alarmManager= (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        preferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        alarm_schedule=Integer.parseInt(preferences.getString(ALARM_SCHEDULE_KEY,"5"));
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        alarm_schedule = Integer.parseInt(preferences.getString(ALARM_SCHEDULE_KEY, "5"));
         kapat = findViewById(R.id.kapat);
         ertele = findViewById(R.id.ertele);
         alarm = findViewById(R.id.alarm);
@@ -57,19 +56,24 @@ public class AlarmActivity extends AppCompatActivity implements View.OnTouchList
         time = findViewById(R.id.time);
         alarm.setOnTouchListener(this);
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.alarm_ani);
-        alarm.startAnimation(animation);
-        uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (uri == null) {
-            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        ringtone = RingtoneManager.getRingtone(this, uri);
-        ringtone.play();
 
         if (todo != null) {
+
+            animation = AnimationUtils.loadAnimation(this, R.anim.alarm_ani);
+            alarm.startAnimation(animation);
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if (uri == null) {
+                uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+            ringtone = RingtoneManager.getRingtone(this, uri);
+            ringtone.play();
+
             title.setText(todo.getTitle());
             summary.setText(todo.getSummary());
             time.setText(todo.getReminder());
+
+        }else{
+            finish();
         }
 
     }
@@ -91,7 +95,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnTouchList
                     }
                     alarmSchedule();
                     finish();
-                }else if (alarm.getX() > kapat.getX() - 40) {
+                } else if (alarm.getX() > kapat.getX() - 40) {
                     alarm.setX(kapat.getX());
                     if (ringtone.isPlaying()) {
                         ringtone.stop();
@@ -109,13 +113,13 @@ public class AlarmActivity extends AppCompatActivity implements View.OnTouchList
 
     private void alarmSchedule() {
 
-        Calendar calendar=Calendar.getInstance();
-        calendar.set(Calendar.MINUTE,(calendar.get(Calendar.MINUTE)+alarm_schedule));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, (calendar.get(Calendar.MINUTE) + alarm_schedule));
 
-        Intent intent =new Intent(this,AlarmActivity.class);
-        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,0);
+        Intent intent = new Intent(this, AlarmActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
     }
 }

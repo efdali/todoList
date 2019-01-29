@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -404,6 +405,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         calendar.add(Calendar.DATE, +1);
         String dateT = format.format(calendar.getTime());
 
+        Log.d("tarih",date+" "+dateT);
         belirsizTodos.clear();
         todayTodos.clear();
         tomorrowTodos.clear();
@@ -411,12 +413,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         futureTodos.clear();
 
         for (Todo todo : todos) {
-
             if (todo.getDate() == null) {
                 belirsizTodos.add(todo);
-            } else if (todo.getDate().trim().equals(date)) {
+            } else if (todo.getDate().contains(date)) {
                 todayTodos.add(todo);
-            } else if (todo.getDate().trim().equals(dateT)) {
+            } else if (todo.getDate().contains(dateT)) {
                 tomorrowTodos.add(todo);
             } else if (Util.isPast(todo)) {
                 pastTodos.add(todo);
