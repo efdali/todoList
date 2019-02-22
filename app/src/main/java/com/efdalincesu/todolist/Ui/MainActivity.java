@@ -1,7 +1,10 @@
 package com.efdalincesu.todolist.Ui;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,7 +33,7 @@ import android.widget.Toast;
 import com.efdalincesu.todolist.DBSqlite.DatabaseUtil;
 import com.efdalincesu.todolist.Model.Todo;
 import com.efdalincesu.todolist.R;
-import com.efdalincesu.todolist.Services.AlarmManagerService;
+import com.efdalincesu.todolist.Services.NotifReceiver;
 import com.efdalincesu.todolist.Ui.Adapter.MainAdapter;
 import com.efdalincesu.todolist.Ui.Fragments.DetailsFragment;
 import com.efdalincesu.todolist.Utils.CustomClick;
@@ -45,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public static final String FRAGMENT_TAG = "DetailsFragment";
     public static final String PAST_TODO_KEY = "pref_past";
-
 
     Display display;
     int width;
@@ -76,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(this, AlarmManagerService.class));
         display = getWindowManager().getDefaultDisplay();
         width = display.getWidth();
         db = new DatabaseUtil(this);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         initViews();
         initVar();
         initTodos();
-
+        setAlarmManager();
 
         belirsizAdap = new MainAdapter(belirsizTodos, this);
         belirsizRec.setAdapter(belirsizAdap);
@@ -100,6 +101,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         futureAdap = new MainAdapter(futureTodos, this);
         futureRec.setAdapter(futureAdap);
+
+
+    }
+
+    private void setAlarmManager() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+
+        Intent intent1 = new Intent(this, NotifReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent1, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        alarmManager.cancel(pendingIntent);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
 
 
     }
@@ -163,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         futureRec.setLayoutManager(new LinearLayoutManager(this));
         futureRec.setHasFixedSize(true);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Tüm Görevler");
+        getSupportActionBar().setTitle(getString(R.string.app_name));
 
 
         //View Listeners
@@ -233,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public boolean onQueryTextChange(String newText) {
                 belirsizAdap.getFilter().filter(newText);
+                todayAdap.getFilter().filter(newText);
+                tomorrowAdap.getFilter().filter(newText);
+                pastAdap.getFilter().filter(newText);
+                futureAdap.getFilter().filter(newText);
                 return true;
             }
         });
@@ -321,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         dateText.setText(dateString);
                     }
                 }, year, month, day);
-//                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
                 break;
             case R.id.container1:

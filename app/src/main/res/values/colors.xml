@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ECEFF1</color>
-    <color name="colorPrimaryDark">#90A4AE</color>
-    <color name="colorAccent">#263238</color>
-    <color name="titleColor">#37474F</color>
-    <color name="splash_background">#1A237E</color>
+    <color name="colorPrimary">#ECEFF1</color>  <!--Toolbar-->
+    <color name="colorPrimaryDark">#90A4AE</color> <!--Status Bar-->
+    <color name="colorAccent">#263238</color> <!--Checkbox ...-->
     <color name="black">#000</color>
     <color name="white">#fff</color>
 
+
+    <color name="titleColor">#37474F</color>
+    <color name="splash_background">#1A237E</color>
+    <color name="add_layout">#ECEFF1</color>
+    <color name="fragment_bg">#90A4AE</color>
+    <color name="alarm_bg">#4d09c1</color>
+    <color name="fragment_cardview_bg">#ECEFF1</color>
+    <color name="main_bg">#fff</color>
+    <color name="checkbox_false">#22aa</color>
+
+
+    <!--Color Palette-->
+
+
+    <!--<color name="colorPrimary">#ECEFF1</color>-->
+    <!--<color name="colorPrimaryDark">#90A4AE</color>-->
+    <!--<color name="colorAccent">#263238</color>-->
+    <!--<color name="fragment_bg">#f55</color>-->
+    <!--<color name="fragment_cardview_bg">#f76e6e</color>-->
+    <!--<color name="titleColor">#37474F</color>-->
+    <!--<color name="splash_background">#1A237E</color>-->
+    <!--<color name="black">#000</color>-->
+    <!--<color name="white">#fff</color>-->
 </resources>

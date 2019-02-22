@@ -78,6 +78,7 @@ public class NotifReceiver extends BroadcastReceiver {
             bigTextStyle.bigText(msg);
             bigTextStyle.setSummaryText("TODO");
             bigTextStyle.setBigContentTitle("Bugün " + todos.size() + " Adet Todo Var.");
+            builder.setContentText("Todo'larınız Var.");
             builder.setStyle(bigTextStyle);
         }
 
@@ -93,9 +94,9 @@ public class NotifReceiver extends BroadcastReceiver {
                     bundle.putSerializable("todo", todo);
                     intent2.putExtras(bundle);
                     PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent2, 0);
-                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.setTimeInMillis(System.currentTimeMillis() + alarm);
                     calendar.set(Calendar.HOUR_OF_DAY, todo.getReminderHour());
-                    calendar.set(Calendar.MINUTE, (todo.getReminderMinute() + alarm));
+                    calendar.set(Calendar.MINUTE, todo.getReminderMinute());
                     alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent1);
                 }
             }

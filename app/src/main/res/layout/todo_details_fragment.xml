@@ -15,7 +15,7 @@
             android:id="@+id/titleTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Todo Başlık" />
+            android:text="@string/todo_title" />
 
 
         <Switch
@@ -35,7 +35,7 @@
         android:id="@+id/summaryTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Todo Açıklama" />
+        android:text="@string/todo_summary" />
 
     <EditText
         android:id="@+id/summaryET"
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            app:cardBackgroundColor="#f76e6e"
+            app:cardBackgroundColor="@color/fragment_cardview_bg"
             app:cardCornerRadius="5dp">
 
             <LinearLayout
@@ -70,15 +70,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
-                    android:text="Todo Tarihi" />
+                    android:text="@string/todo_date" />
 
                 <TextView
                     android:id="@+id/dateTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:text="23.12.2018 12:30" />
+                    android:layout_marginTop="10dp" />
 
             </LinearLayout>
 
@@ -91,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:clickable="true"
-            app:cardBackgroundColor="#f76e6e"
+            app:cardBackgroundColor="@color/fragment_cardview_bg"
             app:cardCornerRadius="5dp">
 
             <LinearLayout
@@ -105,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
-                    android:text="Todo Hatırlatıcı" />
+                    android:text="@string/todo_reminder" />
 
                 <TextView
                     android:id="@+id/reminderTV"
@@ -113,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="Kapalı" />
+                    android:text="@string/reminder_state" />
 
             </LinearLayout>
 
@@ -128,7 +127,7 @@
         android:id="@+id/dateNowTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Todo Oluşturulma Tarihi" />
+        android:text="@string/todo_create_date" />
 
 
     <EditText
@@ -143,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@drawable/button_border"
-        android:text="Todo Sil"
+        android:text="@string/todo_delete"
         android:textColor="#f55" />
 
 </LinearLayout>

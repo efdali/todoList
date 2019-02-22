@@ -24,8 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Ui.MainActivity" />
-        <activity android:name=".Ui.SettingsActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Ui.SettingsActivity" />
         <activity android:name=".Ui.AlarmActivity"/>
         <receiver android:name=".Services.BootReceiver">
             <intent-filter>
@@ -33,11 +32,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".Services.NotifReceiver"></receiver>
-
-        <service
-            android:name=".Services.AlarmManagerService"
-            android:enabled="true"
-            android:exported="false"></service>
     </application>
 
 </manifest>

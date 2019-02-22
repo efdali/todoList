@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">TODO List</string>
+    <string name="title_belirsiz">Belirsiz</string>
+    <string name="title_bugun">Bugün</string>
+    <string name="title_yarın">Yarın</string>
+    <string name="title_gecmis">Geçmiş</string>
+    <string name="title_gelecek">Gelecek</string>
+    <string name="todo_title">Todo Başlık</string>
+    <string name="todo_summary">Todo Açıklama</string>
+    <string name="todo_date">Todo Tarihi</string>
+    <string name="todo_reminder">Todo Hatırlatıcı</string>
+    <string name="reminder_state">Kapalı</string>
+    <string name="todo_create_date">Todo Oluşturulma Tarihi</string>
+    <string name="todo_delete">Todo Sil</string>
 
 
     <!-- Preferences Strings-->
