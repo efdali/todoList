@@ -28,15 +28,16 @@ import java.util.Calendar;
 public class NotifReceiver extends BroadcastReceiver {
 
     private final int NOTIFICATION_ID = 1;
+    private final String ALARM_KEY = "alarm";
     AlarmManager alarmManager;
     int alarm;
-    private final String ALARM_KEY = "alarm";
-
+    int hour, minute;
     @Override
     public void onReceive(Context context, Intent intent) {
 
         DatabaseUtil db = new DatabaseUtil(context);
-
+        hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        minute = Calendar.getInstance().get(Calendar.MINUTE);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         alarm = Integer.parseInt(preferences.getString(ALARM_KEY, "0"));
@@ -86,6 +87,8 @@ public class NotifReceiver extends BroadcastReceiver {
 
         if (todos.size() > 0) {
 
+            manager.notify(NOTIFICATION_ID, builder.build());
+
             for (Todo todo : todos) {
                 if (todo.getReminder() != null) {
 
@@ -102,9 +105,6 @@ public class NotifReceiver extends BroadcastReceiver {
             }
 
         }
-
-        if (todos.size() > 0)
-            manager.notify(NOTIFICATION_ID, builder.build());
 
     }
 }

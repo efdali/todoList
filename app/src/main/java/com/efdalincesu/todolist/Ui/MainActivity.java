@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,20 +47,19 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public static final String FRAGMENT_TAG = "DetailsFragment";
     public static final String PAST_TODO_KEY = "pref_past";
-
+    public static CardView draggableView;
+    public static List<Todo> belirsizTodos, todayTodos, pastTodos, futureTodos, tomorrowTodos;
+    public static MainAdapter belirsizAdap, todayAdap, tomorrowAdap, pastAdap, futureAdap;
+    static DatabaseUtil db;
     Display display;
     int width;
     float dY;
-    static DatabaseUtil db;
     Calendar calendar = Calendar.getInstance();
-
     int day = calendar.get(Calendar.DAY_OF_MONTH);
     int month = calendar.get(Calendar.MONTH);
     int year = calendar.get(Calendar.YEAR);
     String timeString, dateString;
-
     Toolbar toolbar;
-    public static CardView draggableView;
     EditText todoEt;
     RecyclerView belirsizRec, todayRec, tomorrowRec, pastRec, futureRec;
     ImageButton addB, timeB, dateB, ok1, ok2, ok3, ok4, ok5;
@@ -69,10 +67,49 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     TextView timeText, dateText;
     LinearLayout timeLinear, dateLinear;
     RelativeLayout container1, container2, container3, container4, container5;
-    public static List<Todo> belirsizTodos, todayTodos, pastTodos, futureTodos, tomorrowTodos;
+
+    public static void refreshAdapter() {
+        initTodos();
+
+        belirsizAdap.notifyDataSetChanged();
+        todayAdap.notifyDataSetChanged();
+        tomorrowAdap.notifyDataSetChanged();
+        pastAdap.notifyDataSetChanged();
+        futureAdap.notifyDataSetChanged();
+    }
+
+    public static void initTodos() {
+
+        List<Todo> todos = db.selectTodosASC();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        String date = format.format(calendar.getTime());
+        calendar.add(Calendar.DATE, +1);
+        String dateT = format.format(calendar.getTime());
+
+        belirsizTodos.clear();
+        todayTodos.clear();
+        tomorrowTodos.clear();
+        pastTodos.clear();
+        futureTodos.clear();
+
+        for (Todo todo : todos) {
+            if (todo.getDate() == null) {
+                belirsizTodos.add(todo);
+            } else if (todo.getDate().contains(date)) {
+                todayTodos.add(todo);
+            } else if (todo.getDate().contains(dateT)) {
+                tomorrowTodos.add(todo);
+            } else if (Util.isPast(todo)) {
+                pastTodos.add(todo);
+            } else {
+                futureTodos.add(todo);
+            }
+
+        }
 
 
-    public static MainAdapter belirsizAdap, todayAdap, tomorrowAdap, pastAdap, futureAdap;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,17 +143,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void setAlarmManager() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 10);
 
-        Intent intent1 = new Intent(this, NotifReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent1, 0);
+        Intent intent = new Intent(this, NotifReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         alarmManager.cancel(pendingIntent);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                0,
+                1000 * 60 * 60,
+                pendingIntent);
 
 
     }
@@ -218,16 +255,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         timeText.setText("");
         dateText.setText("");
 
-    }
-
-    public static void refreshAdapter() {
-        initTodos();
-
-        belirsizAdap.notifyDataSetChanged();
-        todayAdap.notifyDataSetChanged();
-        tomorrowAdap.notifyDataSetChanged();
-        pastAdap.notifyDataSetChanged();
-        futureAdap.notifyDataSetChanged();
     }
 
     @Override
@@ -414,40 +441,5 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onDestroy() {
         super.onDestroy();
         db.closeConnect();
-    }
-
-
-    public static void initTodos() {
-
-        List<Todo> todos = db.selectTodosASC();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        String date = format.format(calendar.getTime());
-        calendar.add(Calendar.DATE, +1);
-        String dateT = format.format(calendar.getTime());
-
-        Log.d("tarih",date+" "+dateT);
-        belirsizTodos.clear();
-        todayTodos.clear();
-        tomorrowTodos.clear();
-        pastTodos.clear();
-        futureTodos.clear();
-
-        for (Todo todo : todos) {
-            if (todo.getDate() == null) {
-                belirsizTodos.add(todo);
-            } else if (todo.getDate().contains(date)) {
-                todayTodos.add(todo);
-            } else if (todo.getDate().contains(dateT)) {
-                tomorrowTodos.add(todo);
-            } else if (Util.isPast(todo)) {
-                pastTodos.add(todo);
-            } else {
-                futureTodos.add(todo);
-            }
-
-        }
-
-
     }
 }
