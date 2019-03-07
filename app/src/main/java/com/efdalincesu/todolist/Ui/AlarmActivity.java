@@ -59,7 +59,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnTouchList
 
         if (todo != null) {
 
-            animation = AnimationUtils.loadAnimation(this, R.anim.alarm_ani);
+            animation = AnimationUtils.loadAnimation(this, R.anim.alarm_anim);
             alarm.startAnimation(animation);
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (uri == null) {

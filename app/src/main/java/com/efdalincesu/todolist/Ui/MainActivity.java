@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -32,7 +33,7 @@ import android.widget.Toast;
 import com.efdalincesu.todolist.DBSqlite.DatabaseUtil;
 import com.efdalincesu.todolist.Model.Todo;
 import com.efdalincesu.todolist.R;
-import com.efdalincesu.todolist.Services.NotifReceiver;
+import com.efdalincesu.todolist.Services.NotificationReceiver;
 import com.efdalincesu.todolist.Ui.Adapter.MainAdapter;
 import com.efdalincesu.todolist.Ui.Fragments.DetailsFragment;
 import com.efdalincesu.todolist.Utils.CustomClick;
@@ -144,15 +145,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void setAlarmManager() {
 
-        Intent intent = new Intent(this, NotifReceiver.class);
+        Intent intent = new Intent(this, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        alarmManager.cancel(pendingIntent);
-
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                0,
-                1000 * 60 * 60,
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(SystemClock.elapsedRealtime());
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
+        calendar.set(Calendar.MINUTE, 0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
                 pendingIntent);
 
 

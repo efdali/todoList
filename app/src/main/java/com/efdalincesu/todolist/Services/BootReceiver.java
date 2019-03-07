@@ -7,6 +7,6 @@ import android.content.Intent;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.sendBroadcast(new Intent(context, NotifReceiver.class));
+        context.sendBroadcast(new Intent(context, AlarmReceiver.class));
     }
 }

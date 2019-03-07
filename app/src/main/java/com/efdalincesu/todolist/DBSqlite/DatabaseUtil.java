@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.efdalincesu.todolist.Model.Todo;
 
@@ -164,12 +163,15 @@ public class DatabaseUtil {
         return deletedRows;
     }
 
-    public ArrayList<Todo> selectTodosNotNull(){
+    public ArrayList<Todo> selectTodosToday() {
 
         ArrayList<Todo> todos=new ArrayList<>();
         database=dbHelper.getReadableDatabase();
-        String selection=DBHelper.DATE_COLUMN+" is not null";
-        Cursor cursor=database.query(DBHelper.TABLE_NAME,null,selection,null,null,null,
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormat = format.format(new Date());
+        String selection = DBHelper.DATE_COLUMN + " LIKE ?";
+        String[] selectionArgs = {dateFormat + "%"};
+        Cursor cursor = database.query(DBHelper.TABLE_NAME, null, selection, selectionArgs, null, null,
                 null);
 
         while (cursor.moveToNext()){
