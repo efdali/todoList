@@ -69,7 +69,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             builder.setStyle(bigTextStyle);
         }
 
-        manager.notify(NOTIFICATION_ID, builder.build());
+        if (todos.size() != 0)
+            manager.notify(NOTIFICATION_ID, builder.build());
 
     }
 
